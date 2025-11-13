@@ -1,0 +1,84 @@
+<div class="detail-container">
+  <div class="detail-header">
+    <h2>Détail de la pollution</h2>
+    <a routerLink="/pollutions" class="btn-back">← Retour à la liste</a>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="loading-spinner">⏳</div>
+      <p>Chargement...</p>
+    </div>
+  } @else if (pollution) {
+    <div class="detail-card">
+      <div class="detail-title-section">
+        <h3 class="detail-title">{{ pollution.titre }}</h3>
+        <span class="detail-type-badge">
+          {{ pollution.type_pollution }}
+        </span>
+      </div>
+
+      <div class="detail-content">
+        <div class="detail-section">
+          <span class="section-label">Description</span>
+          <p class="description-text">{{ pollution.description }}</p>
+        </div>
+
+        <div class="detail-section">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="section-label">Date d'observation</span>
+              <p class="section-value">{{ pollution.date_observation | date: 'dd/MM/yyyy à HH:mm' }}</p>
+            </div>
+
+            <div class="info-item">
+              <span class="section-label">Lieu</span>
+              <p class="section-value">{{ pollution.lieu }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section coordinates-section">
+          <span class="section-label">Coordonnées GPS</span>
+          <p class="coordinates-value">
+            Latitude: {{ pollution.latitude }}, Longitude: {{ pollution.longitude }}
+          </p>
+          <a
+            [href]="'https://www.google.com/maps?q=' + pollution.latitude + ',' + pollution.longitude"
+            target="_blank"
+            class="map-link">
+            Voir sur Google Maps
+          </a>
+        </div>
+
+        @if (pollution.photo_url) {
+          <div class="detail-section detail-image-section">
+            <span class="section-label">Photo</span>
+            <img
+              [src]="pollution.photo_url"
+              [alt]="pollution.titre"
+              class="detail-image"
+            />
+          </div>
+        }
+      </div>
+
+      <div class="detail-actions">
+        <a
+          [routerLink]="['/pollutions', pollution.id, 'edit']"
+          class="btn-action btn-edit">
+          Modifier
+        </a>
+        <button
+          (click)="onDelete()"
+          class="btn-action btn-delete">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="error-state">
+      <p>Pollution non trouvée</p>
+    </div>
+  }
+</div>

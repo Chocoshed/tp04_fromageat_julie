@@ -1,0 +1,58 @@
+<div class="recap-container">
+  <h3 class="recap-header">Déclaration enregistrée</h3>
+
+  @if (pollution) {
+    <div class="recap-content">
+      <div class="recap-field">
+        <span class="recap-label">Titre :</span>
+        <span class="recap-value">{{ pollution.titre }}</span>
+      </div>
+
+      <div class="recap-field">
+        <span class="recap-label">Type de pollution :</span>
+        <span class="recap-type-badge">
+          {{ pollution.type_pollution }}
+        </span>
+      </div>
+
+      <div class="recap-field">
+        <span class="recap-label">Description :</span>
+        <p class="recap-description">{{ pollution.description }}</p>
+      </div>
+
+      <div class="recap-field">
+        <span class="recap-label">Date d'observation :</span>
+        <span class="recap-value">{{ pollution.date_observation | date: 'dd/MM/yyyy' }}</span>
+      </div>
+
+      <div class="recap-field">
+        <span class="recap-label">Lieu :</span>
+        <span class="recap-value">{{ pollution.lieu }}</span>
+      </div>
+
+      <div class="recap-field">
+        <span class="recap-label">Coordonnées :</span>
+        <span class="recap-coordinates">{{ pollution.latitude }}, {{ pollution.longitude }}</span>
+      </div>
+
+      @if (pollution.photo_url) {
+        <div class="recap-field">
+          <span class="recap-label">Photo :</span>
+          <img [src]="pollution.photo_url" [alt]="pollution.titre"
+               class="recap-photo" />
+        </div>
+      }
+    </div>
+
+    <div class="recap-actions">
+      <button (click)="onNewDeclaration()" class="btn-new">
+        Nouvelle déclaration
+      </button>
+      <button (click)="onViewList()" class="btn-list">
+        Voir la liste
+      </button>
+      <a routerLink="/pollutions/{{pollution.id}}/edit" class="btn-edit">Modifier</a>
+    </div>
+  }
+
+</div>

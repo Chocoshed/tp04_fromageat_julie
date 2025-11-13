@@ -1,0 +1,42 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2>Liste des pollutions</h2>
+    <a routerLink="/pollutions/create" class="btn-new">
+      Nouvelle pollution
+    </a>
+  </div>
+
+  <div class="pollution-grid">
+    @for (pollution of pollutions$|async; track $index) {
+      <div class="pollution-card">
+        <h3>{{ pollution.titre }}</h3>
+        <span class="pollution-type">{{ pollution.type_pollution }}</span>
+        <p class="pollution-info"><strong>Description:</strong> {{ pollution.description }}</p>
+        <p class="pollution-info"><strong>Date:</strong> {{ pollution.date_observation | date:'medium' }}</p>
+        <p class="pollution-info"><strong>Lieu:</strong> {{ pollution.lieu }}</p>
+        <p class="pollution-info"><strong>Coordonnées:</strong> {{ pollution.latitude }}, {{ pollution.longitude }}</p>
+        @if (pollution.photo_url) {
+          <img [src]="pollution.photo_url" alt="{{ pollution.titre }}" class="pollution-image" />
+        }
+
+        <div class="card-actions">
+          <a routerLink="/pollutions/{{pollution.id}}" class="btn-action btn-view">
+            Voir
+          </a>
+          <a routerLink="/pollutions/{{pollution.id}}/edit" class="btn-action btn-edit">
+            Modifier
+          </a>
+          <button (click)="onDelete(pollution.id)" class="btn-action btn-delete">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <div class="empty-state-icon">🌱</div>
+        <h3>Aucune pollution enregistrée</h3>
+        <p>Commencez par déclarer une pollution</p>
+      </div>
+    }
+  </div>
+</div>

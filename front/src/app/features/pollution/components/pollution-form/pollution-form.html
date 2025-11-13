@@ -1,0 +1,181 @@
+<div class="form-container">
+  <div class="form-header">
+    <h2>
+      {{ isEditMode ? 'Modifier la pollution' : 'Nouvelle pollution' }}
+    </h2>
+    <a routerLink="/pollutions" class="btn-back">← Retour</a>
+  </div>
+
+  @if (!showRecap) {
+    <form
+      [formGroup]="pollutionForm"
+      (ngSubmit)="onSubmit()"
+      class="pollution-form"
+    >
+    <div class="form-section">
+      <label>Titre :</label>
+      <input
+        type="text"
+        formControlName="titre"
+        placeholder="Ex: Décharge sauvage route de..."
+      />
+      @if (pollutionForm.get('titre')?.invalid && pollutionForm.get('titre')?.touched) {
+      <div class="error-message">
+        @if (pollutionForm.get('titre')?.errors?.['required']) {
+        <small>Le titre est requis</small>
+        } @if (pollutionForm.get('titre')?.errors?.['minlength']) {
+        <small>Le titre doit contenir au moins 3 caractères</small>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="form-section">
+      <label>Type de pollution :</label>
+      <select formControlName="type_pollution">
+        <option value="">-- Sélectionner --</option>
+        @for (t of pollutionTypes; track t) {
+        <option [value]="t">{{ t }}</option>
+        }
+      </select>
+      @if (pollutionForm.get('type_pollution')?.invalid &&
+      pollutionForm.get('type_pollution')?.touched) {
+      <small class="error-message">Le type est requis</small>
+      }
+    </div>
+
+    <div class="form-section">
+      <label>Description :</label>
+      <textarea
+        formControlName="description"
+        rows="4"
+        placeholder="Décrivez la pollution observée..."
+      ></textarea>
+      @if (pollutionForm.get('description')?.invalid && pollutionForm.get('description')?.touched) {
+      <div class="error-message">
+        @if (pollutionForm.get('description')?.errors?.['required']) {
+        <small>La description est requise</small>
+        } @if (pollutionForm.get('description')?.errors?.['minlength']) {
+        <small>La description doit contenir au moins 10 caractères</small>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="form-section">
+      <label>Date d'observation :</label>
+      <input
+        type="date"
+        formControlName="date_observation"
+      />
+      @if (pollutionForm.get('date_observation')?.invalid &&
+      pollutionForm.get('date_observation')?.touched) {
+      <div class="error-message">
+        @if (pollutionForm.get('date_observation')?.errors?.['required']) {
+        <small>La date est requise</small>
+        } @if (pollutionForm.get('date_observation')?.errors?.['invalidDate']) {
+        <small>La date n'est pas valide</small>
+        } @if (pollutionForm.get('date_observation')?.errors?.['futureDate']) {
+        <small>La date ne peut pas être dans le futur</small>
+        } @if (pollutionForm.get('date_observation')?.errors?.['tooOldDate']) {
+        <small>La date ne peut pas remonter à plus de 10 ans</small>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="form-section">
+      <label>Lieu :</label>
+      <input
+        type="text"
+        formControlName="lieu"
+        placeholder="Ex: Parc municipal, Rue..."
+      />
+      @if (pollutionForm.get('lieu')?.invalid && pollutionForm.get('lieu')?.touched) {
+      <div class="error-message">
+        @if (pollutionForm.get('lieu')?.errors?.['required']) {
+        <small>Le lieu est requis</small>
+        } @if (pollutionForm.get('lieu')?.errors?.['minlength']) {
+        <small>Le lieu doit contenir au moins 3 caractères</small>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="form-section">
+        <label>Latitude :</label>
+        <input
+          type="number"
+          step="0.000001"
+          formControlName="latitude"
+          placeholder="Ex: 48.8566"
+        />
+        @if (pollutionForm.get('latitude')?.invalid && pollutionForm.get('latitude')?.touched) {
+        <div class="error-message">
+          @if (pollutionForm.get('latitude')?.errors?.['required']) {
+          <small>La latitude est requise</small>
+          } @if (pollutionForm.get('latitude')?.errors?.['invalidNumber']) {
+          <small>Doit être un nombre valide</small>
+          } @if (pollutionForm.get('latitude')?.errors?.['min'] ||
+          pollutionForm.get('latitude')?.errors?.['max']) {
+          <small>Doit être entre -90 et 90</small>
+          }
+        </div>
+        }
+      </div>
+      <div class="form-section">
+        <label>Longitude :</label>
+        <input
+          type="number"
+          step="0.000001"
+          formControlName="longitude"
+          placeholder="Ex: 2.3522"
+        />
+        @if (pollutionForm.get('longitude')?.invalid && pollutionForm.get('longitude')?.touched) {
+        <div class="error-message">
+          @if (pollutionForm.get('longitude')?.errors?.['required']) {
+          <small>La longitude est requise</small>
+          } @if (pollutionForm.get('longitude')?.errors?.['invalidNumber']) {
+          <small>Doit être un nombre valide</small>
+          } @if (pollutionForm.get('longitude')?.errors?.['min'] ||
+          pollutionForm.get('longitude')?.errors?.['max']) {
+          <small>Doit être entre -180 et 180</small>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>Photo (URL) - optionnel :</label>
+      <input
+        type="text"
+        formControlName="photo_url"
+        placeholder="https://example.com/photo.jpg"
+      />
+      @if (pollutionForm.get('photo_url')?.invalid && pollutionForm.get('photo_url')?.touched) {
+      <div class="error-message">
+        @if (pollutionForm.get('photo_url')?.errors?.['pattern']) {
+        <small>L'URL doit commencer par http:// ou https://</small>
+        }
+      </div>
+      }
+    </div>
+
+      <button
+        type="submit"
+        [disabled]="pollutionForm.invalid"
+        class="btn-submit"
+      >
+        {{ isEditMode ? 'Enregistrer les modifications' : 'Déclarer la pollution' }}
+      </button>
+    </form>
+  } @else {
+    <app-pollution-recap
+      [pollution]="submittedPollution"
+      (newDeclaration)="onNewDeclaration()"
+      (viewList)="onViewList()">
+    </app-pollution-recap>
+  }
+</div>
